@@ -18,10 +18,10 @@ To Do List
   
   -->Feature Extraction
   -->Feature Selection
-      bacward elimination
-      greedy algorithm
-      correlation
-      PCA
+      bacward elimination mirror M
+      -->greedy algorithm
+     --> correlation F 
+      -->PCA F
       
       
       
@@ -35,7 +35,7 @@ To Do List
 ----NN
 
 ----Metrics
-    CV
+    CV F
     accury
     confusion_matrix
     recall,precision,F,R
