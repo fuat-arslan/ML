@@ -20,8 +20,7 @@ To Do List
   -->Feature Selection
       bacward elimination mirror M
       -->greedy algorithm
-     --> correlation F 
-      -->PCA F
+   
       
       
       
