@@ -29,16 +29,19 @@ To Do List
     
    
   
-----K-mean
+
 ----XGBoost
 ----NN
 
 ----Metrics
-    CV F
     accury
     confusion_matrix
     recall,precision,F,R
     ALL
+
+
+Requires Further adjustments
+K-means : indentationları bozuk. Docstingslere ihtiyacı var.
 
 
 
