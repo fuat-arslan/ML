@@ -1,3 +1,5 @@
+import numpy as np
+
 class KMeans():
   def __init__(self, num_cluster, state, metric, seed = 1):
     self.num_cluster = num_cluster
@@ -74,7 +76,7 @@ class KMeans():
     iter, diff = 0, 0
     new_centroids = np.zeros((self.num_cluster, X.shape[1]))
     
-    while iter < epoch or diff > self.tolerance:
+    while iter < epoch and diff > self.tolerance:
         # cluster list will be used to keep data indexes of each cluster
         cluster_list = [[] for i in range(self.num_cluster)]
         for idx in range(X.shape[0]):
@@ -91,6 +93,8 @@ class KMeans():
         if iter % 10 == 0:
           print(iter)
         iter +=1
+      
+    return self
           
   def execute(self):
     pass
