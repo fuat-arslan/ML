@@ -2,9 +2,8 @@
 This will include measurment metrics 
 """
 import copy as cp
-
 import numpy as np
-
+import seaborn as sns
 
 class kFold():
     def __init__(self):
@@ -37,3 +36,53 @@ class kFold():
         return total/num_folds
 
 
+#Score generator function
+
+class Evaluator():
+    def __init__(self, prediction, true_value, label_dict, display = True):
+        self.prediction = prediction
+        self.true_value = true_value
+        self.label_dict = label_dict
+        self.display = display
+
+        # sort label dictionary by value
+        self.label_dict = dict(sorted(self.label_dict.items(), key=lambda item: item[1]))
+
+
+    def confusion_matrix(self, prediction, true_value, label_dict, display = True):
+        #number of classes
+        num_class = np.unique(true_value).shape[0]
+        confusion_mat = np.zeros((num_class, num_class))
+
+        for i in range(prediction.shape[0]):
+            confusion_mat[prediction[i], true_value[i]] += 1
+
+        if display:
+            result = sns.heatmap(confusion_mat, annot=True ,cbar = False)
+            result.set(xlabel='Ground Truth', ylabel='Prediction', 
+                       xticklabels = list(label_dict.keys()), 
+                       yticklabels = list(label_dict.keys()))
+            result.set_title("Confusion Matrix")
+        return confusion_mat
+    
+    def scores(self):
+        confusion_mat = self.confusion_matrix(self.prediction, self.true_value, self.label_dict, self.display)
+        
+        acc = np.trace(confusion_mat)/np.sum(confusion_mat)
+        precision = np.diag(confusion_mat) / np.sum(confusion_mat, axis = 0)
+        recall = np.diag(confusion_mat) / np.sum(confusion_mat, axis = 1)
+        f1_score = precision * recall / (precision + recall)
+        
+        # recall, precision, f1 score corresponds to columns
+        score = np.hstack((precision.reshape(-1,1), 
+                           recall.reshape(-1,1), f1_score.reshape(-1,1)))
+
+        result = sns.heatmap(score, annot=True ,cbar = False)
+        result.set(xticklabels=["precision", "recall", "F1 score"], 
+                   ylabel='Classes', yticklabels = list(label_dict.keys()))
+        result.xaxis.tick_top()
+        result.set_title("Scores")
+
+        print("Accuracy: ", np.round(acc,2))
+        return acc, score
+        
