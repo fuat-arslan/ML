@@ -8,12 +8,6 @@ To Do List
 ----EDA Notebook 
 
 
-
-----Preprocess
-  Label Encoder
-  Onehot Encoder
-  
-
 ----Feature_Engineering_Tools
   
   -->Feature Extraction
@@ -29,7 +23,6 @@ To Do List
     
    
   
-
 ----XGBoost
 ----NN
 
@@ -42,7 +35,7 @@ To Do List
 
 Requires Further adjustments
 K-means : indentationları bozuk. Docstingslere ihtiyacı var.
-
+One_Hot : Gerçek data ile deneme yapmadım. Tüm datayı verebiliyoruz. Label Encoder da oluyor ancak her zaman matrix alıyor. yani label verirken matrix olmalı.
 
 
 
