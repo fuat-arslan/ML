@@ -76,4 +76,55 @@ class MinMax():
         return self.learn(X).execute(X)
 
 
+#one hot encoder 
+
+class Encoder():
+    def __init__(self,one_hot = True):
+        self.one_hot = one_hot
+    
+    def learn(self,X):
+        self.label_map_list = {}
+        self.num_features = X.shape[1]
+        self.one_hot_list = {}
+        self.categorical_idx = []
+
+        X_copy = X.copy()
+        for col_idx in range(self.num_features):
+            col = X_copy[:,col_idx]
+           
+            
+            if not np.issubdtype(type(col[0]), np.number):
+                #print(type(col[0]))
+                foo_map = {}
+                self.categorical_idx.append(col_idx)
+
+                u, indices = np.unique(col, return_index=True)
+
+                for i, uniq in enumerate(u):
+                    col[col == uniq] = i
+                    foo_map[uniq] = i
+
+                col = col.astype(int)
+                if self.one_hot:
+                    hot = np.zeros((col.size, col.max() + 1))
+                    hot[np.arange(col.size), col] = 1
+                else:
+                    hot = col.reshape((-1,1))
+
+                self.one_hot_list[str(col_idx)] = hot
+                self.label_map_list[str(col_idx)] = foo_map
+        return self
+
+    def execute(self,X):
+
+        for i in self.one_hot_list.values():
+            X = np.concatenate((X, i),axis = 1)
+            #print(X)
+
+        X = np.delete(X,self.categorical_idx,1)
+            
+        return X.astype(float).astype(int)
+
+    def fast(self,X):
+        return self.learn(X).execute(X)
 
