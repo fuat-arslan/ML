@@ -128,3 +128,29 @@ class Encoder():
     def fast(self,X):
         return self.learn(X).execute(X)
 
+#Outlier Removal by Z score
+
+
+class OutlierRemoval():
+    def __init__(self, X, Y, threshold):
+        self.X = X
+        self.Y = Y
+        self.threshold = threshold
+    
+    def learn(self, sdv_norm = False):
+
+        if not sdv_norm:
+            self.X = (self.X - np.mean(self.X, axis = 0)) / np.std(self.X, axis = 0)
+
+        return self
+
+    def execute(self):
+        data = np.hstack((self.X, self.Y))
+
+        clean_X = data[np.all(abs(self.X) < self.threshold, axis=1)]
+        self.outlier = data[~np.all(abs(self.X) < self.threshold, axis=1)]
+        
+        return clean_X
+    
+    def fast(self, sdv_norm = False):
+        return self.learn(sdv_norm).execute()

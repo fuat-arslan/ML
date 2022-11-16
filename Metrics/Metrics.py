@@ -79,7 +79,7 @@ class Evaluator():
 
         result = sns.heatmap(score, annot=True ,cbar = False)
         result.set(xticklabels=["precision", "recall", "F1 score"], 
-                   ylabel='Classes', yticklabels = list(label_dict.keys()))
+                   ylabel='Classes', yticklabels = list(self.label_dict.keys()))
         result.xaxis.tick_top()
         result.set_title("Scores")
 
