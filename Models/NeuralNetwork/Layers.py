@@ -1,8 +1,9 @@
 """
 This script includes neural network layers. For now there is just Dense layer.
 """
-
+import numpy as np
 from utils import softmax, sigmoid, tanh, relu, initializer
+
 
 class Dense():
     def __init__(self, input_dim, output_dim, method = "Xavier", activation = "relu"):

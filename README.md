@@ -37,5 +37,7 @@ Requires Further adjustments
 K-means : indentationları bozuk. Docstingslere ihtiyacı var.
 One_Hot : Gerçek data ile deneme yapmadım. Tüm datayı verebiliyoruz. Label Encoder da oluyor ancak her zaman matrix alıyor. yani label verirken matrix olmalı.
 
+Cost function generalization
+
 
 
