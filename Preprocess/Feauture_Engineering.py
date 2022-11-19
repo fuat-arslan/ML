@@ -100,7 +100,8 @@ class BackwardElimination():
 
                 temp_acc = np.sum(pred==true_label)/pred.shape[0]
                 temp_acc_list[i]= temp_acc
-            
+
+                print('\n)'
             t2 = time.time()
 
             # get unuseful data and drop it
