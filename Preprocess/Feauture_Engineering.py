@@ -75,10 +75,12 @@ class BackwardElimination():
             temp_acc_list = np.zeros((X.shape[1], 1))
 
             self.model.layers[0].__init__(self.model.layers[0].input_dim-1,self.model.layers[0].output_dim)
+            for j in range(1,len(self.model.layers)):
+                self.model.layers[j].__init__(self.model.layers[j].input_dim,self.model.layers[j].output_dim)
             opt = argv[0]
             opt.__init__(opt.method, opt.learning_rate, opt.beta, opt.beta1,opt.beta2)
             #self.model.__init__(self.model.layers,self.model_out)
-            self.model = cp.deepcopy(self.model)
+            #self.model = cp.deepcopy(self.model)
             
             
             for i in range(X.shape[1]):
