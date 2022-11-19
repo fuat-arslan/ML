@@ -75,7 +75,7 @@ class Evaluator():
         acc = np.trace(confusion_mat)/np.sum(confusion_mat)
         precision = np.diag(confusion_mat) / np.sum(confusion_mat, axis = 0)
         recall = np.diag(confusion_mat) / np.sum(confusion_mat, axis = 1)
-        f1_score = precision * recall / (precision + recall)
+        f1_score = 2*precision * recall / (precision + recall)
         
         # recall, precision, f1 score corresponds to columns
         score = np.hstack((precision.reshape(-1,1), 
