@@ -4,6 +4,8 @@ This scirpt includes trainer of the network.
 
 from utils import mini_batch_generator, Cross_Entropy_Loss
 
+import matplotlib.pyplot as plt
+
 class NeuralNetwork():
     def __init__(self, layers, cost_function):
         self.layers = layers
@@ -47,6 +49,11 @@ class NeuralNetwork():
                 print ("Cost after epoch %i: %f" %(epoch, loss/len(batches_list)))
             loss_list.append(loss/ len(batches_list))
             epoch += 1
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.title("NN Loss vs Epoch Graph")
+        plt.plot(loss_list)
         return
 
     def predict(self, data):
