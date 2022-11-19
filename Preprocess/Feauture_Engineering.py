@@ -70,7 +70,7 @@ class BackwardElimination():
         
 
             bench_acc = np.sum(pred_bench==true_label_bench)/pred_bench.shape[0]
-            
+            print("\n Accuracy  : %" ,np.round(100*bench_acc,4))
 
             temp_acc_list = np.zeros((X.shape[1], 1))
 
