@@ -13,7 +13,7 @@ class kFold():
         pass
     
     
-    def eval(self,model,X, y, num_folds = 3,cost_metric):
+    def eval(self,model,X, y, cost_metric, num_folds = 3):
         """
         real function to run CV alorithm
         """
