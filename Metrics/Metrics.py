@@ -32,7 +32,7 @@ class kFold():
         seperators = [a for a in range(0,len(X),int(len(X)/num_folds))]
         X_copy = X.copy()
         y_copy = y.copy()
-        for i in range(1,num_folds):
+        for i in range(1,num_folds+1):
 
             model_copy = cp.deepcopy(model)
             X_val = X_copy[seperators[i-1]:seperators[i]].copy()
