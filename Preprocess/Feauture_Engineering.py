@@ -53,7 +53,7 @@ class BackwardElimination():
         self.col_names = col_names
 
     def learn(self, X, Y, *argv):
-        # x in copysi olsun as˝l X den Á˝karmalar execute de yap˝lacak, fast toplu yapacak!!
+        
         self.del_col_names = []
         # diff is initialized to make while conditioon true at the beginning
         eliminated = 0
@@ -70,10 +70,14 @@ class BackwardElimination():
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
                 temp_data = np.delete(X, i, axis = 1)
-                self.model.fit(temp_data, Y, *argv) #burada parametreleri nas˝l ayarl˝caz ??
-                pred = self.model.predict(temp_data)
+                self.model.learn(temp_data, Y, *argv) 
+                soft_out = self.model.predict(temp_data)
                 
-                temp_acc = np.sum(pred==Y)/pred.shape[0]
+                pred = np.argmax(soft_out, axis = 0)
+                true_label = np.argmax(Y, axis = 1)
+            
+
+                temp_acc = np.sum(pred==true_label)/pred.shape[0]
                 temp_acc_list[i]= temp_acc
             
             t2 = time.time()
