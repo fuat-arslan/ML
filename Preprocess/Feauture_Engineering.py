@@ -75,8 +75,8 @@ class BackwardElimination():
             temp_acc_list = np.zeros((X.shape[1], 1))
 
             self.model.layers[0].__init__(self.model.layers[0].input_dim-1,self.model.layers[0].output_dim)
-            foo = *argv
-            foo[0].__init__()
+            opt = *argv[0]
+            opt.__init__(opt.learning_rate, opt.beta, opt.beta1,opt.beta2)
             #self.model.__init__(self.model.layers,self.model_out)
             self.model = cp.deepcopy(self.model)
             
