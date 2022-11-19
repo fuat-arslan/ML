@@ -47,8 +47,9 @@ class kFold():
             arg_pred = np.argmax(pred,axis=0)
             true_label = np.argmax(y_val,axis = 1)
             acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
-            print("Prediction shape: ", arg_pred.shape)
-            print(f"Accuracy of fold {i} : %" ,np.round(acc,4)*100)
+            #print("Prediction shape: ", arg_pred.shape)
+            print(f"Accuracy of fold {i} : %" ,np.round(100*acc,4))
+            print('\n')
             
             total += loss/pred.shape[1]
         print("Average loss:", np.round(total/num_folds,4) )
