@@ -151,7 +151,7 @@ class OutlierRemoval():
         self.outlier = data[~np.all(abs(self.X) < self.threshold, axis=1)]
         clean_X = clean_data[:,:-1]
         clean_Y = clean_data[:,-1]
-        return clean_X, clean_Y
+        return clean_X, clean_Y.reshape(-1,1)
     
     def fast(self, sdv_norm = False):
         return self.learn(sdv_norm).execute()
