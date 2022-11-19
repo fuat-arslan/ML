@@ -147,10 +147,11 @@ class OutlierRemoval():
     def execute(self):
         data = np.hstack((self.X, self.Y))
 
-        clean_X = data[np.all(abs(self.X) < self.threshold, axis=1)]
+        clean_data = data[np.all(abs(self.X) < self.threshold, axis=1)]
         self.outlier = data[~np.all(abs(self.X) < self.threshold, axis=1)]
-        
-        return clean_X
+        clean_X = clean_data[:,:-1]
+        clean_Y = clean_data[:,-1]
+        return clean_X, clean_Y
     
     def fast(self, sdv_norm = False):
         return self.learn(sdv_norm).execute()
