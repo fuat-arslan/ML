@@ -42,7 +42,7 @@ class kFold():
             model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
 
-            loss = cost(X_val.T, Y_val.T)
+            loss = cost(X_val.T, y_val.T)
 
             total += loss
         return total/num_folds
