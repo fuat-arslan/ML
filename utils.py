@@ -37,7 +37,8 @@ def relu(Z, dA = 0):
 
 def Cross_Entropy_Loss(O, Y,back = False):
     if not back:
-        L = -np.sum(np.log(O) * Y)
+        eps = 1e-15
+        L = -np.sum(np.log(O+eps) * Y)
     else:
         L = O - Y
     return L

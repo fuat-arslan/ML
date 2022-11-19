@@ -59,14 +59,16 @@ class Evaluator():
             confusion_mat[prediction[i], true_value[i]] += 1
 
         if display:
-            result = sns.heatmap(confusion_mat, annot=True ,cbar = False)
+            result = sns.heatmap(confusion_mat, annot=True ,cbar = False,fmt='g')
             result.set(xlabel='Ground Truth', ylabel='Prediction', 
                        xticklabels = list(label_dict.keys()), 
                        yticklabels = list(label_dict.keys()))
+            result.xaxis.tick_top()
             result.set_title("Confusion Matrix")
         return confusion_mat
     
     def scores(self):
+        plt.figure(figsize = (10,10))
         plt.subplot(2,1,1)
         confusion_mat = self.confusion_matrix(self.prediction, self.true_value, self.label_dict, self.display)
         
@@ -80,7 +82,7 @@ class Evaluator():
                            recall.reshape(-1,1), f1_score.reshape(-1,1)))
 
         plt.subplot(2,1,2)
-        result = sns.heatmap(score, annot=True ,cbar = False)
+        result = sns.heatmap(score, annot=True ,cbar = False,fmt='g')
         result.set(xticklabels=["precision", "recall", "F1 score"], 
                    ylabel='Classes', yticklabels = list(self.label_dict.keys()))
         result.xaxis.tick_top()
