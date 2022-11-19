@@ -85,6 +85,7 @@ class BackwardElimination():
             
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
+                print(f"The feature of {self.col_names[i]} is removed")
                 temp_data = np.delete(X, i, axis = 1)
                 for j in range(0,len(self.model.layers)):
                     self.model.layers[j].__init__(self.model.layers[j].input_dim,self.model.layers[j].output_dim)
@@ -108,9 +109,9 @@ class BackwardElimination():
             idx_col = np.argmax(temp_acc_list)
             if temp_acc_list[idx_col] > bench_acc and (temp_acc_list[idx_col] - bench_acc) > self.stop_cond:
                 X = np.delete(X, idx_col, axis = 1)
-                print("The column {} is dropped since accuray increased from {} to {}".format(self.col_names[idx_col], bench_acc, temp_acc_list[idx_col]))
+                print("The column {} is dropped since accuray increased from {} to {}".format(self.col_names[idx_col], np.round(100*bench_acc,4),  np.round(100*temp_acc_list[idx_col],4)))
                 print("Elapsed time for droping {} column is {} mins {} secs".format(self.col_names[idx_col], (t2-t1)//60, (t2-t1) - (t2-t1)//60 * 60))
-                self.col_names.remove(self.col_names[idx_col])
+                np.delete(self.col_names,idx_col)
 
                 eliminated += 1
                 diff = temp_acc_list[idx_col] - bench_acc
