@@ -61,6 +61,7 @@ class BackwardElimination():
         while eliminated < self.num_elim or self.stop_cond < diff:
             #benchmark model
             t1 = time.time()
+            
             self.model.learn(X,Y,*argv)
             soft_out_bench= self.model.predict(X)
                 
@@ -72,10 +73,11 @@ class BackwardElimination():
             
 
             temp_acc_list = np.zeros((X.shape[1], 1))
-
+            self.model.layers[0].input_dim -= 1
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
                 temp_data = np.delete(X, i, axis = 1)
+                 
                 self.model.learn(temp_data, Y, *argv) 
                 soft_out = self.model.predict(temp_data)
                 
