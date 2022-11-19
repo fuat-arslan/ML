@@ -73,8 +73,9 @@ class BackwardElimination():
             
 
             temp_acc_list = np.zeros((X.shape[1], 1))
-            self.model = cp.deepcopy(self.model)
             self.model.layers[0].input_dim -= 1
+            self.model = cp.deepcopy(self.model)
+            
             
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
