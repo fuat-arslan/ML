@@ -85,7 +85,7 @@ class BackwardElimination():
             
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
-                print(f"The feature of {self.col_names[i]} is removed")
+                print(f"\n The feature of {self.col_names[i]} is removed")
                 temp_data = np.delete(X, i, axis = 1)
                 for j in range(0,len(self.model.layers)):
                     self.model.layers[j].__init__(self.model.layers[j].input_dim,self.model.layers[j].output_dim)
