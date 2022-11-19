@@ -11,6 +11,7 @@ class PCA():
         self.COV = np.cov((X - self.MEAN), rowvar = False)
         self.EIG_VAL , self.EIG_VEC = np.linalg.eigh(self.COV)
         self.num_component_ = num_component
+        return self
     def execute(self,X):
         indexes = np.argsort(self.EIG_VAL)[::-1]
         sorted_eigenvalue = self.EIG_VAL[indexes]
