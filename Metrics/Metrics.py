@@ -47,9 +47,10 @@ class kFold():
             arg_pred = np.argmax(pred,axis=0)
             true_label = np.argmax(y_val,axis = 1)
             acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
+            print("Prediction shape: ", arg_pred.shape)
             print(acc)
             
-            total += loss
+            total += loss/pred.shape[1]
         return total/num_folds
 
 
