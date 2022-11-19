@@ -86,7 +86,11 @@ class BackwardElimination():
             for i in range(X.shape[1]):
                 # fit model by droping one column for each column, get acc
                 temp_data = np.delete(X, i, axis = 1)
-                 
+                for j in range(0,len(self.model.layers)):
+                    self.model.layers[j].__init__(self.model.layers[j].input_dim,self.model.layers[j].output_dim)
+                opt = argv[0]
+                opt.__init__(opt.method, opt.learning_rate, opt.beta, opt.beta1,opt.beta2)
+
                 self.model.learn(temp_data, Y, *argv) 
                 soft_out = self.model.predict(temp_data)
                 
