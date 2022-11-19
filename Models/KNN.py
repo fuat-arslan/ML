@@ -21,7 +21,7 @@ class KNN():
             #print(len(self.X))
             #print(sample_hat.shape)
             dist = self.distance_metric(self.metric, self.X, sample_hat)
-            sorted_idx = np.argsort(-dist)
+            sorted_idx = np.argsort(dist)
             #print(sorted_idx)
             #print(self.Y[sorted_idx[:self.num_neig]])
             #print(np.bincount(int(self.Y[sorted_idx[:self.num_neig]])))
