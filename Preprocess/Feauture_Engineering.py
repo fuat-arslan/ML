@@ -61,9 +61,15 @@ class BackwardElimination():
         while eliminated < self.num_elim or self.stop_cond < diff:
             #benchmark model
             t1 = time.time()
-            self.model.fit(X)
-            pred = self.model.predict(X)
-            bench_acc = self.model.evaluate(X, Y, acc = True)
+            self.model.learn(X,Y,*argv)
+            soft_out_bench= self.model.predict(X)
+                
+            pred_bench = np.argmax(soft_out_bench, axis = 0)
+            true_label_bench = np.argmax(Y, axis = 1)
+        
+
+            bench_acc = np.sum(pred_bench==true_label_bench)/pred_bench.shape[0]
+            
 
             temp_acc_list = np.zeros((X.shape[1], 1))
 
