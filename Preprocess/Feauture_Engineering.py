@@ -54,7 +54,7 @@ class BackwardElimination():
 
     def learn(self, X, Y, *argv):
         
-        self.del_col_names = []
+        self.del_col_idx = []
         # diff is initialized to make while conditioon true at the beginning
         eliminated = 0
         diff = self.stop_cond + 1
@@ -102,6 +102,7 @@ class BackwardElimination():
                 temp_acc = np.sum(pred==true_label)/pred.shape[0]
                 temp_acc_list[i]= temp_acc
 
+                print("\n Accuracy  : %" ,np.round(100*temp_acc,4))
                 print('\n')
             t2 = time.time()
 
@@ -112,6 +113,7 @@ class BackwardElimination():
                 print("The column {} is dropped since accuray increased from {} to {}".format(self.col_names[idx_col], np.round(100*bench_acc,4),  np.round(100*temp_acc_list[idx_col],4)))
                 print("Elapsed time for droping {} column is {} mins {} secs".format(self.col_names[idx_col], (t2-t1)//60, (t2-t1) - (t2-t1)//60 * 60))
                 np.delete(self.col_names,idx_col)
+                self.del_col_idx.append(idx_col)
 
                 eliminated += 1
                 diff = temp_acc_list[idx_col] - bench_acc
@@ -121,7 +123,7 @@ class BackwardElimination():
                 return self 
 
     def execute(self, X):
-        X = np.delete(X, self.del_col_names, axis = 1)
+        X = np.delete(X, self.del_col_idx, axis = 1)
         return X
 
     def fast(self, X, Y, *argv):
