@@ -6,15 +6,26 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from utils import *
+
 class kFold():
     def __init__(self):
         pass
     
     
-    def eval(self,model,X, y, num_folds = 3):
+    def eval(self,model,X, y, num_folds = 3,cost_metric):
         """
         real function to run CV alorithm
         """
+
+        if cost_metric == 'CrossEntropy':
+            cost = Cross_Entropy_Loss
+        elif cost_metric == 'MSE':
+            #mse = ((pred - y_val)**2).mean(axis=0) 
+            pass
+        else:
+            print('Enter a valid cost metric')
+
         total = 0
         
         seperators = [a for a in range(0,len(X),int(len(X)/num_folds))]
@@ -31,9 +42,9 @@ class kFold():
             model_copy.learn(X_train,y_train)
             pred = model_copy.predict(X_val)
 
-            mse = ((pred - y_val)**2).mean(axis=0) 
+            loss = cost(X_val.T, Y_val.T)
 
-            total += mse
+            total += loss
         return total/num_folds
 
 
