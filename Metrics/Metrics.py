@@ -5,6 +5,7 @@ import copy as cp
 import numpy as np
 import seaborn as sns
 
+
 class kFold():
     def __init__(self):
         pass
@@ -66,6 +67,7 @@ class Evaluator():
         return confusion_mat
     
     def scores(self):
+        plt.subplot(2,1,1)
         confusion_mat = self.confusion_matrix(self.prediction, self.true_value, self.label_dict, self.display)
         
         acc = np.trace(confusion_mat)/np.sum(confusion_mat)
@@ -77,6 +79,7 @@ class Evaluator():
         score = np.hstack((precision.reshape(-1,1), 
                            recall.reshape(-1,1), f1_score.reshape(-1,1)))
 
+        plt.subplot(2,1,2)
         result = sns.heatmap(score, annot=True ,cbar = False)
         result.set(xticklabels=["precision", "recall", "F1 score"], 
                    ylabel='Classes', yticklabels = list(self.label_dict.keys()))
