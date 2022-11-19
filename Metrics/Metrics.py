@@ -6,6 +6,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 from utils import *
 
 class kFold():
@@ -42,8 +43,12 @@ class kFold():
             model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
 
-            loss = cost(X_val.T, y_val.T)
-
+            loss = cost(pred, y_val.T)
+            arg_pred = np.argmax(pred,axis=0)
+            true_label = np.argmax(y_val,axis = 1)
+            acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
+            print(acc)
+            
             total += loss
         return total/num_folds
 
