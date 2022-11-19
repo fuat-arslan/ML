@@ -13,7 +13,7 @@ class kFold():
         pass
     
     
-    def eval(self,model,X, y, cost_metric, num_folds = 3):
+    def eval(self,model,X, y, cost_metric, num_folds = 3,*argv):
         """
         real function to run CV alorithm
         """
@@ -39,7 +39,7 @@ class kFold():
             X_train = np.delete(X_copy,range(seperators[i-1],seperators[i]),axis = 0)
             y_train = np.delete(y_copy,range(seperators[i-1],seperators[i]),axis = 0)
 
-            model_copy.learn(X_train,y_train)
+            model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
 
             loss = cost(X_val.T, Y_val.T)
