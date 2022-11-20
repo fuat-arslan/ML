@@ -4,6 +4,7 @@ class KNN():
         
         self.num_neig = num_neig
         self.metric = metric
+        self.weighted = weighted
     
     def distance_metric(self, metric, mat1, mat2):
         if metric == "euclidian":
@@ -24,7 +25,7 @@ class KNN():
             #print(sample_hat.shape)
             dist = self.distance_metric(self.metric, self.X, sample_hat)
             sorted_idx = np.argsort(dist)
-            if weighted:
+            if self.weighted:
                 u, indicies = np.unique(self.Y[sorted_idx[:self.num_neig]],return_inverse=True)
                 indexed_distances = dist[sorted_idx[:self.num_neig]]
                 weighted_label = np.zeros(len(np.unique(self.Y)))
