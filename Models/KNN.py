@@ -1,8 +1,7 @@
 import numpy as np 
 class KNN():
-    def __init__(self, X, Y, num_neig, metric ="euclidian" ,weighted =False):
-        self.X = X 
-        self.Y = Y
+    def __init__(self, num_neig, metric ="euclidian" ,weighted =False):
+        
         self.num_neig = num_neig
         self.metric = metric
     
@@ -11,7 +10,9 @@ class KNN():
             return np.sqrt(np.sum((mat1 - mat2) ** 2, axis = 1))
 
     
-    def learn(self):
+    def learn(self, X, Y,):
+        self.X = X 
+        self.Y = Y
         return self
     
     def predict(self, sample):
