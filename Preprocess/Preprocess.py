@@ -173,20 +173,22 @@ class StratifiedTrainValTestSplit:
         X, y = self.X, self.y
         train_size, val_size, test_size = self.train_size, self.val_size, self.test_size
 
+        # Divide the data into classes
+        classes, y_indices = np.unique(y, return_inverse=True)
+        y_counts = np.bincount(y_indices)
+
+        # Then, divide the data into train, val, and test sets
+        train_counts = (train_size * y_counts).astype(int)
+        val_counts = (val_size * y_counts).astype(int)
+        test_counts = (test_size * y_counts).astype(int)
+
+        X_train, y_train = [], []
+        X_val, y_val = [], []
+        X_test, y_test = [], []
+
         # First, check if we should stratify the data
         if self.stratify:
-            # Divide the data into classes
-            classes, y_indices = np.unique(y, return_inverse=True)
-            y_counts = np.bincount(y_indices)
-
-            # Then, divide the data into train, val, and test sets
-            train_counts = (train_size * y_counts).astype(int)
-            val_counts = (val_size * y_counts).astype(int)
-            test_counts = (test_size * y_counts).astype(int)
-
-            X_train, y_train = [], []
-            X_val, y_val = [], []
-            X_test, y_test = [], []
+            
 
             for class_, count in zip(classes, y_counts):
                 class_indices = np.where(y == class_)[0]
@@ -208,18 +210,7 @@ class StratifiedTrainValTestSplit:
 
           
         else: 
-             #First, divide the data into classes
-            classes, y_indices = np.unique(y, return_inverse=True)
-            y_counts = np.bincount(y_indices)
-
-            # Then, divide the data into train, val, and test sets
-            train_counts = (train_size * y_counts).astype(int)
-            val_counts = (val_size * y_counts).astype(int)
-            test_counts = (test_size * y_counts).astype(int)
-
-            X_train, y_train = [], []
-            X_val, y_val = [], []
-            X_test, y_test = [], []
+            
 
             for class_, count in zip(classes, y_counts):
                 class_indices = np.where(y == class_)[0]
