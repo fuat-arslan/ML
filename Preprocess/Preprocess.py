@@ -176,7 +176,7 @@ class StratifiedTrainValTestSplit:
         # First, check if we should stratify the data
         if self.stratify:
             # Divide the data into classes
-            classes, y_indices = np.unique(y, return_inverse=True)
+            classes, y_indices = np.unique(y, return_inverse=True, axis = 0)
             y_counts = np.bincount(y_indices)
 
             # Then, divide the data into train, val, and test sets
