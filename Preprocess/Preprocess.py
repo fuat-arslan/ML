@@ -173,22 +173,20 @@ class StratifiedTrainValTestSplit:
         X, y = self.X, self.y
         train_size, val_size, test_size = self.train_size, self.val_size, self.test_size
 
-        # Divide the data into classes
-        classes, y_indices = np.unique(y, return_inverse=True)
-        y_counts = np.bincount(y_indices)
-
-        # Then, divide the data into train, val, and test sets
-        train_counts = (train_size * y_counts).astype(int)
-        val_counts = (val_size * y_counts).astype(int)
-        test_counts = (test_size * y_counts).astype(int)
-
-        X_train, y_train = [], []
-        X_val, y_val = [], []
-        X_test, y_test = [], []
-
         # First, check if we should stratify the data
         if self.stratify:
-            
+            # Divide the data into classes
+            classes, y_indices = np.unique(y, return_inverse=True)
+            y_counts = np.bincount(y_indices)
+
+            # Then, divide the data into train, val, and test sets
+            train_counts = (train_size * y_counts).astype(int)
+            val_counts = (val_size * y_counts).astype(int)
+            test_counts = (test_size * y_counts).astype(int)
+
+            X_train, y_train = [], []
+            X_val, y_val = [], []
+            X_test, y_test = [], []
 
             for class_, count in zip(classes, y_counts):
                 class_indices = np.where(y == class_)[0]
@@ -207,49 +205,54 @@ class StratifiedTrainValTestSplit:
                 y_val.append(y[val_indices])
                 X_test.append(X[test_indices])
                 y_test.append(y[test_indices])
+
+            X_train = np.concatenate(X_train)
+            y_train = np.concatenate(y_train)
+            X_val = np.concatenate(X_val)
+            y_val = np.concatenate(y_val)
+            X_test = np.concatenate(X_test)
+            y_test = np.concatenate(y_test)
+
+            if self.random_state is not None:
+                np.random.seed(self.random_state)
+                
+                idx1 = np.random.permutation(len(X_train)).astype(int)
+                X_train = X_train[idx1]
+                y_train = y_train[idx1]
+
+                idx2 = np.random.permutation(len(X_val)).astype(int)
+                X_val = X_val[idx2]
+                y_val = y_val[idx2]
+
+                idx3 = np.random.permutation(len(X_test)).astype(int)
+                X_test = X_test[idx3]
+                y_test = y_test[idx3]
 
           
         else: 
-            
+             
 
-            for class_, count in zip(classes, y_counts):
-                class_indices = np.where(y == class_)[0]
+            # Split the data and labels into random train, validation, and test sets
+            data_size = X.shape[0]
+            train_count = int(data_size * self.train_size)
+            val_count = int(data_size * self.val_size)
+            test_count = int(data_size * self.test_size)
 
-                if self.random_state is not None:
-                    np.random.seed(self.random_state)
-                    np.random.shuffle(class_indices)
+            # Create random indices for the train, validation, and test sets
+            indices = np.random.permutation(data_size)
+            train_indices = indices[:train_count]
+            validation_indices = indices[train_count:train_count+val_count]
+            test_indices = indices[train_size+val_count:]
 
-                train_indices = class_indices[:train_counts[class_]]
-                val_indices = class_indices[train_counts[class_]:train_counts[class_]+val_counts[class_]]
-                test_indices = class_indices[-test_counts[class_]:]
+            # Use the indices to create the train, validation, and test sets
+            X_train = X[train_indices]
+            y_train = y[train_indices]
+            X_val = X[validation_indices]
+            y_val = y[validation_indices]
+            X_test = X[test_indices]
+            y_test = y[test_indices]
 
-                X_train.append(X[train_indices])
-                y_train.append(y[train_indices])
-                X_val.append(X[val_indices])
-                y_val.append(y[val_indices])
-                X_test.append(X[test_indices])
-                y_test.append(y[test_indices])
 
-        X_train = np.concatenate(X_train)
-        y_train = np.concatenate(y_train)
-        X_val = np.concatenate(X_val)
-        y_val = np.concatenate(y_val)
-        X_test = np.concatenate(X_test)
-        y_test = np.concatenate(y_test)
-
-        if self.random_state is not None:
-            np.random.seed(self.random_state)
-            
-            idx1 = np.random.permutation(len(X_train)).astype(int)
-            X_train = X_train[idx1]
-            y_train = y_train[idx1]
-
-            idx2 = np.random.permutation(len(X_val)).astype(int)
-            X_val = X_val[idx2]
-            y_val = y_val[idx2]
-
-            idx3 = np.random.permutation(len(X_test)).astype(int)
-            X_test = X_test[idx3]
-            y_test = y_test[idx3]
+        
 
         return X_train, X_val, X_test, y_train, y_val, y_test
