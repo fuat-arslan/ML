@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 from utils import *
 
 class kFold():
-    def __init__(self):
+    def __init__(self,argmax_flag = False):
+        self.argmax_flag = argmax_flag
         pass
     
     
@@ -25,7 +26,7 @@ class kFold():
             #mse = ((pred - y_val)**2).mean(axis=0) 
             pass
         else:
-            print('Enter a valid cost metric')
+            cost_print = False
 
         total = 0
         
@@ -42,10 +43,15 @@ class kFold():
 
             model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
-
-            loss = cost(pred, y_val.T)
-            arg_pred = np.argmax(pred,axis=0)
-            true_label = np.argmax(y_val,axis = 1)
+            if self.argmax_flag:
+                loss = cost(pred, y_val.T)
+                arg_pred = np.argmax(pred,axis=0)
+                true_label = np.argmax(y_val,axis = 1)
+                
+            else:
+                arg_pred = pred
+                true_label = y_val
+            
             acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
             #print("Prediction shape: ", arg_pred.shape)
             print(f"Accuracy of fold {i} : %" ,np.round(100*acc,4))

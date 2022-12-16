@@ -36,4 +36,4 @@ class KNN():
                 predictions.append(u[np.argmax(weighted_label)])
             else:
                 predictions.append(np.bincount(self.Y[sorted_idx[:self.num_neig]].astype(int).reshape(-1)).argmax())
-        return predictions  
+        return np.array(predictions)  
