@@ -35,7 +35,7 @@ class kFold():
         X_copy = X.copy()
         y_copy = y.copy()
         for i in range(1,num_folds+1):
-            acc = 0
+            
             model_copy = cp.deepcopy(model)
             X_val = X_copy[seperators[i-1]:seperators[i]].copy()
             y_val = y_copy[seperators[i-1]:seperators[i]]
@@ -45,16 +45,14 @@ class kFold():
             model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
             if self.argmax_flag:
-                print("kalın yarrak")
+                
                 loss = cost(pred, y_val.T)
                 arg_pred = np.argmax(pred,axis=0)
                 true_label = np.argmax(y_val,axis = 1)
                 total += loss/pred.shape[1]
                 
             else:
-                print(pred, pred.shape, "yarrak0")
-                print(y_val, y_val.shape, "yarrak1")
-                print(y_val.flatten().shape, "yarrak2")
+                
                 arg_pred = pred
                 true_label = y_val.flatten()
             
