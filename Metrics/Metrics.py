@@ -12,13 +12,14 @@ from utils import *
 class kFold():
     def __init__(self,argmax_flag = False):
         self.argmax_flag = argmax_flag
-        pass
+        
     
     
     def eval(self,model,X, y, cost_metric, num_folds = 3,*argv):
         """
         real function to run CV alorithm
         """
+        acc_list = []
         cost_print = True
         if cost_metric == 'CrossEntropy':
             cost = Cross_Entropy_Loss
@@ -47,19 +48,22 @@ class kFold():
                 loss = cost(pred, y_val.T)
                 arg_pred = np.argmax(pred,axis=0)
                 true_label = np.argmax(y_val,axis = 1)
+                total += loss/pred.shape[1]
                 
             else:
                 arg_pred = pred
                 true_label = y_val
             
             acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
+            acc_list.append(acc)
             #print("Prediction shape: ", arg_pred.shape)
-            print(f"Accuracy of fold {i} : %" ,np.round(100*acc,4))
-            print('\n')
             
-            total += loss/pred.shape[1]
-        print("Average loss:", np.round(total/num_folds,4) )
-        return total/num_folds
+            
+        if cost_print:  
+            print("Average loss:", np.round(total/num_folds,4) )
+        print(f"Accuracy of folds respectively :" ,np.round(acc_list,2)*100)
+        print('\n')
+        return total/num_folds, np.array(acc_list)
 
 
 #Score generator function
