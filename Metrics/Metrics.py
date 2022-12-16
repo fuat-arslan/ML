@@ -19,7 +19,7 @@ class kFold():
         """
         real function to run CV alorithm
         """
-
+        cost_print = True
         if cost_metric == 'CrossEntropy':
             cost = Cross_Entropy_Loss
         elif cost_metric == 'MSE':
