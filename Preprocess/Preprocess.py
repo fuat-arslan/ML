@@ -176,7 +176,7 @@ class StratifiedTrainValTestSplit:
         # First, check if we should stratify the data
         if self.stratify:
             # Divide the data into classes
-            classes, y_indices = np.unique(y, return_inverse=True, axis = 0)
+            classes, y_indices = np.unique(y, return_inverse=True,axis=0)
             y_counts = np.bincount(y_indices)
 
             # Then, divide the data into train, val, and test sets
@@ -188,24 +188,36 @@ class StratifiedTrainValTestSplit:
             X_val, y_val = [], []
             X_test, y_test = [], []
 
+            i=0
+            
             for class_, count in zip(classes, y_counts):
-                class_indices = np.where(y == class_)[0]
+                
+                
+              
+                class_indices = np.where(np.all(y == class_,axis=1))[0]
+                
 
-                if self.random_state is not None:
-                    np.random.seed(self.random_state)
-                    np.random.shuffle(class_indices)
+                if class_.shape[0]>1:
+                    class_ = np.argmax(class_,axis=0)
 
-                train_indices = class_indices[:train_counts[class_]]
-                val_indices = class_indices[train_counts[class_]:train_counts[class_]+val_counts[class_]]
-                test_indices = class_indices[-test_counts[class_]:]
+                
+                
 
+                t = int(train_counts[i])
+
+                train_indices = class_indices[:t]
+                val_indices = class_indices[train_counts[i]:train_counts[i]+val_counts[i]]
+                test_indices = class_indices[-(test_counts[i]):]
+
+                
                 X_train.append(X[train_indices])
                 y_train.append(y[train_indices])
                 X_val.append(X[val_indices])
                 y_val.append(y[val_indices])
                 X_test.append(X[test_indices])
                 y_test.append(y[test_indices])
-
+                
+                i +=1
             X_train = np.concatenate(X_train)
             y_train = np.concatenate(y_train)
             X_val = np.concatenate(X_val)
