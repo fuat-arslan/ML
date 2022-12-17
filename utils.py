@@ -26,6 +26,12 @@ def softmax(Z):
     A = num / denom
     return A
 
+
+def stable_softmax(x):
+    
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=0)
+
 def relu(Z, dA = 0):
     if not isinstance(dA, np.ndarray):
         A = np.maximum(0, Z)
