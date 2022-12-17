@@ -2,7 +2,7 @@
 This script includes neural network layers. For now there is just Dense layer.
 """
 import numpy as np
-from utils import softmax, sigmoid, tanh, relu, initializer
+from utils import softmax, sigmoid, tanh, relu, initializer, stable_softmax
 
 
 class Dense():
@@ -27,6 +27,9 @@ class Dense():
         # activation forward
         if self.activation == "softmax":
             A = softmax(self.Z)
+        
+        elif self.activation == "softmax_stable":
+            A = stable_softmax(self.Z)
         
         elif self.activation == "relu":
             A = relu(self.Z)
