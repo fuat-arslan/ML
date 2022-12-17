@@ -26,9 +26,9 @@ def softmax(Z):
     return A
 
 def stable_softmax(x):
-    
+    eps = 1e-15
     e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=0)
+    return e_x / (e_x.sum(axis=0) + eps)
 
 def relu(Z, dA = 0):
     if not isinstance(dA, np.ndarray):
