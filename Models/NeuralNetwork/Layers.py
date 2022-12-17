@@ -45,10 +45,10 @@ class Dense():
             dZ = relu(dA, self.Z)
         
         elif self.activation == "sigmoid":
-            dZ = sigmoid(dA, self.Z)
+            dZ = sigmoid(self.Z, dA)
         
         elif self.activation == "tanh":
-            dZ = tanh(dA, self.Z)
+            dZ = tanh(self.Z, dA)
         else:
             dZ = dA
         m = self.X.shape[1]
