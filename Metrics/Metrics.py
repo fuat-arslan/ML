@@ -35,7 +35,7 @@ class kFold():
         X_copy = X.copy()
         y_copy = y.copy()
         for i in range(1,num_folds+1):
-
+            
             model_copy = cp.deepcopy(model)
             X_val = X_copy[seperators[i-1]:seperators[i]].copy()
             y_val = y_copy[seperators[i-1]:seperators[i]]
@@ -45,14 +45,16 @@ class kFold():
             model_copy.learn(X_train,y_train,*argv)
             pred = model_copy.predict(X_val)
             if self.argmax_flag:
+                
                 loss = cost(pred, y_val.T)
                 arg_pred = np.argmax(pred,axis=0)
                 true_label = np.argmax(y_val,axis = 1)
                 total += loss/pred.shape[1]
                 
             else:
+                
                 arg_pred = pred
-                true_label = y_val
+                true_label = y_val.flatten()
             
             acc = np.sum(arg_pred == true_label)/arg_pred.shape[0]
             acc_list.append(acc)
@@ -62,7 +64,7 @@ class kFold():
         if cost_print:  
             print("Average loss:", np.round(total/num_folds,4) )
         print(f"Accuracy of folds respectively :" ,np.round(acc_list,2)*100)
-        print('\n')
+        #print('\n')
         return total/num_folds, np.array(acc_list)
 
 
