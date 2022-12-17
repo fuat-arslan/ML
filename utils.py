@@ -4,11 +4,14 @@ import matplotlib.pyplot as plt
 
 """**utils**"""
 
-def sigmoid(Z, dA = None):
+def sigmoid(Z, dA = 0):
+
+    exp_Z = np.exp(-Z)
     if not isinstance(dA, np.ndarray):
-        A = 1/(1+np.exp(-Z))
+        A = 1/(1+exp_Z)
     else:
-        A = dA *  (1/(1+np.exp(-Z))) * (1- 1/(1+np.exp(-Z)))
+        s = 1/(1+exp_Z)
+        A = dA * s * (1 - s)
     return A
 
 
