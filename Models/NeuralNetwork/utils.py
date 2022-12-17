@@ -3,15 +3,13 @@ import matplotlib.pyplot as plt
 import math
 """**utils**"""
 
-def sigmoid(Z, dA = 0):
-
-    exp_Z = np.exp(-Z)
+def sigmoid(Z, dA = None):
     if not isinstance(dA, np.ndarray):
-        A = 1/(1+exp_Z)
+        A = 1/(1+np.exp(-Z))
     else:
-        s = 1/(1+exp_Z)
-        A = dA * s * (1 - s)
+        A = dA *  (1/(1+np.exp(-Z))) * (1- 1/(1+np.exp(-Z)))
     return A
+
 
 
 def tanh(Z, dA = None):
