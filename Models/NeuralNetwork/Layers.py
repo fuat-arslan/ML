@@ -28,7 +28,7 @@ class Dense():
         if self.activation == "softmax":
             A = softmax(self.Z)
         
-        elif self.activation == "stable_softmax":
+        elif self.activation == "softmax_stable":
             A = stable_softmax(self.Z)
         
         elif self.activation == "relu":
