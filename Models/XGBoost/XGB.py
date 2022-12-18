@@ -149,7 +149,7 @@ class Node:
         return prediction
 
 class Tree:
-    def __init__(self, X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class):
+    def __init__(self, X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class, col_num):
         self.root = Node(X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class, col_num)
         #self.root.calculate_weight()
         self.root.depth = 0
