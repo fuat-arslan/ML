@@ -1,14 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Dec 18 15:21:28 2022
-
-@author: Melih Berk Yılmaz
-"""
 from tqdm import tqdm
 import numpy as np
 
 class Node:
-    def __init__(self, X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover,  num_class):
+    def __init__(self, X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class, col_num):
         self.X = X
         self.y = y
         self.max_depth = max_depth
@@ -28,8 +22,8 @@ class Node:
         self.weight = None
         self.cover = cover
         self.num_class = num_class
-        #self.calculate_weight()
-        self.column_subsample = np.random.permutation(8)[:round(0.8*8)]
+        self.col_num = col_num
+        self.column_subsample = np.random.permutation(X.shape[1])[:col_num]
 
     @staticmethod
     def loss_reduction(lhs_gradient, lhs_hessian, rhs_gradient, rhs_hessian, lmb, gamma):
@@ -49,11 +43,15 @@ class Node:
         # gain = gain * float("-inf")
 
         for col in self.column_subsample:
-            sorted_row = self.X[np.argsort(self.X[:, col])]
-            for row in range(self.X.shape[0]):
-                lhs = self.X[:, col] < sorted_row[row, col]
-                rhs = self.X[:, col] >= sorted_row[row, col]
-
+            #sorted_row = self.X[np.argsort(self.X[:, col])]
+            sorted_row = np.unique(self.X[:,col])
+            #for row in range(self.X.shape[0]):
+            for value in sorted_row:
+                # lhs = self.X[:, col] < sorted_row[row, col]
+                # rhs = self.X[:, col] >= sorted_row[row, col]
+                lhs = self.X[:, col] < value
+                rhs = self.X[:, col] >= value
+                
                 if lhs.sum() < self.min_leaf_size or rhs.sum() < self.min_leaf_size:
                     continue
                 lhs_gradient = self.gradient[lhs].sum(axis=0)
@@ -67,7 +65,8 @@ class Node:
                     #print("içerdeyim baba")
                     gain = temp_gain
                     self.split_feature = col
-                    self.split_value = self.X[row, col]
+                    #self.split_value = self.X[row, col]
+                    self.split_value = value
         
         if gain.all()  == np.zeros(self.num_class).all():
             self.is_leaf = True
@@ -90,11 +89,11 @@ class Node:
              
             self.left = Node(self.X[lhs], self.y[lhs], self.gradient[lhs], self.hessian[lhs],
                              self.max_depth - 1, self.min_leaf_size,self.gamma, 
-                             self.lmb, self.cover, self.num_class)
+                             self.lmb, self.cover, self.num_class, self.col_num)
     
             self.right = Node(self.X[rhs], self.y[rhs], self.gradient[rhs], self.hessian[rhs],
                               self.max_depth - 1, self.min_leaf_size, self.gamma, 
-                              self.lmb, self.cover, self.num_class)
+                              self.lmb, self.cover, self.num_class, self.col_num)
         else:
             self.calculate_weight()
 
@@ -151,7 +150,7 @@ class Node:
 
 class Tree:
     def __init__(self, X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class):
-        self.root = Node(X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class)
+        self.root = Node(X, y, gradient, hessian, max_depth, min_leaf_size, gamma, lmb, cover, num_class, col_num)
         #self.root.calculate_weight()
         self.root.depth = 0
         self.max_depth = max_depth
@@ -160,6 +159,7 @@ class Tree:
         self.lmb = lmb
         self.cover = cover
         self.num_class = num_class
+        self.col_num = col_num
 
     def grow_tree(self, node):
         """
@@ -197,9 +197,9 @@ class Tree:
 
         self.grow_tree(self.root)
 
-
 class XGBoost_Classifier:
-    def __init__(self, n_trees=10, max_depth=3, min_leaf_size=20, learning_rate=0.3, gamma=0, lmb=1, cover=1):
+    def __init__(self, n_trees=5, max_depth=3, min_leaf_size=400, 
+                 learning_rate=0.3, gamma=0, lmb=1, cover=1, col_num=4):
         self.n_trees = n_trees
         self.max_depth = max_depth
         self.min_leaf_size = min_leaf_size
@@ -207,8 +207,7 @@ class XGBoost_Classifier:
         self.gamma = gamma
         self.lmb = lmb
         self.cover = cover
-
-
+        self.col_num = col_num
 
     def gradient_hessian(self, y, y_pred):
         """
@@ -245,7 +244,7 @@ class XGBoost_Classifier:
 
             tree = Tree(self.X, self.y, gradient, hessian, self.max_depth, 
                         self.min_leaf_size, self.gamma, self.lmb, 
-                        self.cover, self.n_classes)
+                        self.cover, self.n_classes, self.col_num)
             tree.learn()
             self.trees.append(tree)
             self.y_pred += self.learning_rate * tree.predict(self.X)
